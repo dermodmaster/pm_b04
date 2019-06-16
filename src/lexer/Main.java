@@ -57,6 +57,7 @@ public class Main {
 
                 String code = "";
                 List<Token> token = new ArrayList<Token>();
+                /*
                 token.add(new Comment());
                 token.add(new MultilineComment());
                 token.add(new JavaDocComment());
@@ -66,11 +67,15 @@ public class Main {
                 token.add(new Annotation());
                 token.add(new NewLine());
                 CatchAll catchAll = new CatchAll("");
+                */
+                //Todo: add found token
 
                 Lexer lexer = new Lexer();
+                //Todo: register found Tokens
+                /*
                 lexer.registerToken(token);
                 lexer.registerCatchAll(catchAll);
-
+                */
 
                 LexerPanel lp = new LexerPanel(code, lexer);
 
