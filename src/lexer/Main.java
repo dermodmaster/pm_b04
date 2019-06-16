@@ -1,6 +1,6 @@
 package lexer;
 
-//import org.apache.commons.cli.*;
+import org.apache.commons.cli.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args){
         // create Options object
-        /*
+
         Options options = new Options();
 
         // add t option
@@ -19,48 +19,42 @@ public class Main {
         options.addOption(option);
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd=null;
-        */
-        try {/*
-             cmd= parser.parse(options, args);
 
-            if(cmd.hasOption("h")) {
-               HelpFormatter formatter=new HelpFormatter();
+        try {
+            cmd = parser.parse(options, args);
 
-               formatter.printHelp("Optionen",options);
-            }
-            else {
-                if(cmd.hasOption("r")){
-                    String[]arg=cmd.getOptionValues("r");
-                    System.out.println("DateiPfad : "+arg[0]);
-                    if(arg[1].equals("0")){
+            if (cmd.hasOption("h")) {
+                HelpFormatter formatter = new HelpFormatter();
+
+                formatter.printHelp("Optionen", options);
+            } else {
+                if (cmd.hasOption("r")) {
+                    String[] arg = cmd.getOptionValues("r");
+                    System.out.println("DateiPfad : " + arg[0]);
+                    if (arg[1].equals("0")) {
                         System.out.println("Reihenfolge nach Typ");
-                    }
-                    else if(arg[1].equals("1")){
+                    } else if (arg[1].equals("1")) {
                         System.out.println("Reihenfolge nach Wert");
-                    }
-                    else{
+                    } else {
                         System.out.println("Falscher Wert bei der Priorisierung");
                         System.exit(0);
                     }
-                }
-                else{
+                } else {
                     System.out.println("Bitte Einen Ordner angeben und die Priorisierung");
                     System.exit(0);
                 }
 
-                if(cmd.hasOption("l")){
-                    if(cmd.getOptionValue("l").equals("0")){
+                if (cmd.hasOption("l")) {
+                    if (cmd.getOptionValue("l").equals("0")) {
                         System.out.println("Logger Deaktiviert");
-                    }
-                    else if(cmd.getOptionValue("l").equals("1")){
+                    } else if (cmd.getOptionValue("l").equals("1")) {
                         System.out.println("Logger Aktiviert");
-                    }
-                    else{
+                    } else {
                         System.out.println("Falsches Argument");
                     }
-                }*/
+                }
 
-                
+
                 String code = "";
                 List<Token> token = new ArrayList<Token>();
                 token.add(new Comment());
@@ -81,6 +75,7 @@ public class Main {
                 LexerPanel lp = new LexerPanel(code, lexer);
 
 
+            }
         }
         catch(Exception pe) {
             System.out.println(pe.getMessage());
