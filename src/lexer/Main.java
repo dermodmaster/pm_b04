@@ -2,6 +2,13 @@ package lexer;
 
 import org.apache.commons.cli.*;
 
+import java.io.File;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +64,22 @@ public class Main {
 
                 String code = "";
                 List<Token> token = new ArrayList<Token>();
+
+                File folder = new File("C:\\Users\\levic\\IdeaProjects\\pm_b04_tokens\\out\\production\\pm_b04_tokens\\");
+                URL[] ua = new URL[]{folder.toURI().toURL()};
+                URLClassLoader ucl = URLClassLoader.newInstance(ua);
+                Class<?> c1 = null;
+                try {
+                    c1 = Class.forName("lexer.Annotation", true, ucl);
+                }catch (ClassNotFoundException e){
+                    System.out.println("Nix gefunden");
+                }
+
+                Token annotation = (Token) c1.newInstance();
+                Annotation[] lol = annotation.getClass().getDeclaredAnnotations();
+                showMethods(c1);
+                System.out.println(c1.getDeclaredAnnotations());
+
                 /*
                 token.add(new Comment());
                 token.add(new MultilineComment());
@@ -85,5 +108,15 @@ public class Main {
         catch(Exception pe) {
             System.out.println(pe.getMessage());
         }
+    }
+
+    private static void showMethods(Class<?> c) {
+        Method[] allMethods = c.getDeclaredMethods();  // all methods (excl. inherited)
+
+        for (Method m : allMethods) {
+            System.out.println(m.toGenericString());
+            System.out.println("  Modifiers:  " + Modifier.toString(m.getModifiers()));
+        }
+        System.out.println();
     }
 }
