@@ -35,9 +35,11 @@ public class Main {
 
                 formatter.printHelp("Optionen", options);
             } else {
+                String datei=null;
                 if (cmd.hasOption("r")) {
                     String[] arg = cmd.getOptionValues("r");
                     System.out.println("DateiPfad : " + arg[0]);
+                    datei=arg[0];
                     if (arg[1].equals("0")) {
                         System.out.println("Reihenfolge nach Typ");
                     } else if (arg[1].equals("1")) {
@@ -65,7 +67,11 @@ public class Main {
                 String code = "";
                 List<Token> token = new ArrayList<Token>();
 
-                File folder = new File("C:\\Users\\levic\\IdeaProjects\\pm_b04_tokens\\out\\production\\pm_b04_tokens\\");
+                File folder = new File(datei);
+                if(!folder.exists()){
+                    System.out.println("Datei nicht vorhanden");
+                    System.exit(1);
+                }
                 URL[] ua = new URL[]{folder.toURI().toURL()};
                 URLClassLoader ucl = URLClassLoader.newInstance(ua);
                 Class<?> c1 = null;
