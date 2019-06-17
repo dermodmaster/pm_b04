@@ -74,18 +74,20 @@ public class Main {
                 }
                 URL[] ua = new URL[]{folder.toURI().toURL()};
                 URLClassLoader ucl = URLClassLoader.newInstance(ua);
-                Class<?> c1 = null;
+                Class<?> c0=null,c1 = null;
                 try {
+                    c0 = Class.forName("lexer.CatchAllToken", true, ucl);
                     c1 = Class.forName("lexer.Annotation", true, ucl);
                 }catch (ClassNotFoundException e){
                     System.out.println("Nix gefunden");
                 }
 
                 Token annotation = (Token) c1.newInstance();
+                Token catchAll =(Token)c0.newInstance();
                 Annotation[] lol = annotation.getClass().getDeclaredAnnotations();
                 showMethods(c1);
                 System.out.println(c1.getDeclaredAnnotations());
-
+                token.add(annotation);
                 /*
                 token.add(new Comment());
                 token.add(new MultilineComment());
@@ -101,10 +103,10 @@ public class Main {
 
                 Lexer lexer = new Lexer();
                 //Todo: register found Tokens
-                /*
+
                 lexer.registerToken(token);
                 lexer.registerCatchAll(catchAll);
-                */
+
 
                 LexerPanel lp = new LexerPanel(code, lexer);
 
