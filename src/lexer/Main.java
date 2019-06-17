@@ -74,17 +74,47 @@ public class Main {
                 }
                 URL[] ua = new URL[]{folder.toURI().toURL()};
                 URLClassLoader ucl = URLClassLoader.newInstance(ua);
-                Class<?> c1 = null;
-                try {
-                    c1 = Class.forName("lexer.Annotation", true, ucl);
-                }catch (ClassNotFoundException e){
-                    System.out.println("Nix gefunden");
+
+                ArrayList<File> classFiles = getClassFiles(folder);
+
+
+                //Nach Prios sortieren
+                ArrayList<Token> prioA = new ArrayList<Token>();
+                ArrayList<Token> prioB = new ArrayList<Token>();
+                ArrayList<Token> prioC = new ArrayList<Token>();
+                ArrayList<Token> prio1 = new ArrayList<Token>();
+                ArrayList<Token> prio2 = new ArrayList<Token>();
+                ArrayList<Token> prio3 = new ArrayList<Token>();
+                Token catchAll = null;
+
+                for(File currentFile : classFiles){
+                    System.out.println(currentFile.getName());
+                    String[] splittedFileName = currentFile.getName().split("[.]");
+                    String classname = "";
+                    try {
+                        classname = splittedFileName[0];
+                    }catch (IndexOutOfBoundsException e){
+                        System.out.println("Datei hat keine Dateityperweiterung im Namen");
+                    }
+                    Class<?> c1 = null;
+                    try {
+                        //Todo: Frage? Wird wirklich geschaut ob die Klasse im Lexer Package ist?
+                        c1 = Class.forName("lexer."+classname, true, ucl);
+                    }catch (ClassNotFoundException e){
+                        System.out.println("Nix gefunden");
+                    }
+                    try{
+                        Token annotation = (Token) c1.newInstance();
+                        Annotation[] lol = annotation.getClass().getDeclaredAnnotations();
+                    }catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
+
+                    //Todo: Nach Annotations schauen und zuordnen
                 }
 
-                Token annotation = (Token) c1.newInstance();
-                Annotation[] lol = annotation.getClass().getDeclaredAnnotations();
-                showMethods(c1);
-                System.out.println(c1.getDeclaredAnnotations());
+
+
 
                 /*
                 token.add(new Comment());
@@ -125,4 +155,25 @@ public class Main {
         }
         System.out.println();
     }
+
+    public static ArrayList<File> getClassFiles(final File folder) {
+        ArrayList<File> files = new ArrayList<File>();
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                files.addAll(getClassFiles(fileEntry));
+            } else {
+                String filename = fileEntry.getName();
+                String[] splittedFileName = filename.split("[.]");
+                String classname = "";
+                try {
+                    classname = splittedFileName[splittedFileName.length-1];
+                }catch (IndexOutOfBoundsException e){
+                    System.out.println("Datei hat keine Dateityperweiterung im Namen");
+                }
+                if(classname.equals("class")) files.add(fileEntry);
+            }
+        }
+        return files;
+    }
+
 }
