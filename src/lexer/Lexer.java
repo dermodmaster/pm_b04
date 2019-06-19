@@ -25,10 +25,13 @@ public class Lexer {
             handler.setFormatter(new Formatter("A",element.getClass().getName(),"registerToken"));
             log.addHandler(handler);
         }
-        log.finer("Add");
     }
 
     public void registerCatchAll(Token input){
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(Level.FINER);
+        handler.setFormatter(new Formatter("A",input.getClass().getName(),"registerCatchAll"));
+        log.addHandler(handler);
         this.catchAll = input;
     }
 

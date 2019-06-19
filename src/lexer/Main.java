@@ -160,6 +160,7 @@ public class Main {
                 lexer.registerToken(prio3);
             }
             lexer.registerCatchAll(catchAll);
+            log.finer("Add");
             LexerPanel lp = new LexerPanel(code, lexer);
 
 
