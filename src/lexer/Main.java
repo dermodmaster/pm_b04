@@ -11,9 +11,14 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.ConsoleHandler;
 
 public class Main {
+    private static Logger log=Logger.getLogger(Main.class.getName());
     public static void main(String[] args) {
+
         // create Options object
 
         Options options = new Options();
@@ -62,8 +67,10 @@ public class Main {
             if (cmd.hasOption("l")) {
                 if (cmd.getOptionValue("l").equals("0")) {
                     System.out.println("Logger Deaktiviert");
+                    log.setLevel(Level.OFF);
                 } else if (cmd.getOptionValue("l").equals("1")) {
                     System.out.println("Logger Aktiviert");
+                    log.setLevel(Level.FINER);
                 } else {
                     System.out.println("Falsches Argument");
                 }
@@ -114,6 +121,13 @@ public class Main {
                 try {
                     Token token = (Token) c1.newInstance();
                     Annotation[] annotation = token.getClass().getDeclaredAnnotations();
+
+                    //Der ConsolHandler wird erstellt und immer die aktuelle klasse genommen
+                    ConsoleHandler handler = new ConsoleHandler();
+                    handler.setLevel(Level.FINER);
+                    handler.setFormatter(new Formatter("A",classname,"main"));
+                    log.addHandler(handler);
+
                     if (annotation[0] instanceof CatchAll) {
                         catchAll = token;
                     } else if (annotation[0] instanceof PrioA) {
@@ -138,7 +152,7 @@ public class Main {
                 }
             }
 
-
+            log.finer("Add");
             Lexer lexer = new Lexer();
 
             if (sortTyp) {
@@ -167,6 +181,11 @@ public class Main {
         System.out.println();
     }
 
+    /**
+     * Gibt von einenem gewissen Ordner alle classFiles zurück
+     * @param folder der ordner mit den files
+     * @return  Arraylist mit allen gefundenen files
+     */
     public static ArrayList<File> getClassFiles(final File folder) {
         ArrayList<File> files = new ArrayList<File>();
         for (final File fileEntry : folder.listFiles()) {
