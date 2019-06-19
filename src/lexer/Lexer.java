@@ -2,6 +2,10 @@ package lexer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import static lexer.Main.log;
+
 
 public class Lexer {
     private List<Token> token = new ArrayList<Token>();
@@ -11,10 +15,17 @@ public class Lexer {
         this.token.add(input);
     }
 
+
     public void registerToken(List<Token> inputList){
         for(Token element:inputList){
             this.token.add(element);
+            //Der ConsolHandler wird erstellt und immer die aktuelle klasse genommen
+            ConsoleHandler handler = new ConsoleHandler();
+            handler.setLevel(Level.FINER);
+            handler.setFormatter(new Formatter("A",element.getClass().getName(),"registerToken"));
+            log.addHandler(handler);
         }
+        log.finer("Add");
     }
 
     public void registerCatchAll(Token input){

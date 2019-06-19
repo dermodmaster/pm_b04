@@ -13,10 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.ConsoleHandler;
 
 public class Main {
-    private static Logger log=Logger.getLogger(Main.class.getName());
+    public static Logger log=Logger.getLogger(Main.class.getName());
     public static void main(String[] args) {
 
         // create Options object
@@ -122,11 +121,8 @@ public class Main {
                     Token token = (Token) c1.newInstance();
                     Annotation[] annotation = token.getClass().getDeclaredAnnotations();
 
-                    //Der ConsolHandler wird erstellt und immer die aktuelle klasse genommen
-                    ConsoleHandler handler = new ConsoleHandler();
-                    handler.setLevel(Level.FINER);
-                    handler.setFormatter(new Formatter("A",classname,"main"));
-                    log.addHandler(handler);
+
+
 
                     if (annotation[0] instanceof CatchAll) {
                         catchAll = token;
@@ -148,11 +144,10 @@ public class Main {
                         }
                     }
                 } catch (ReflectiveOperationException e) {
-                    System.out.println(e.getMessage());
                 }
             }
 
-            log.finer("Add");
+
             Lexer lexer = new Lexer();
 
             if (sortTyp) {
