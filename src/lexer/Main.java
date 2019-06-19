@@ -19,9 +19,9 @@ public class Main {
         Options options = new Options();
 
         // add t option
-        options.addOption("h", false, "hilfe ausgeben");
-        options.addOption("l", true, "Deaktivierung/Aktivieren logger(0 Deaktiviert,1 Aktiviert)");
-        Option option = new Option("r", true, "Eingabe eines Ordners, aus dem die Token per Reﬂection geladen werden sollen und Art der Priorisierung(0 Nach Typ,1 Nach Wert)");
+        options.addOption("h","help", false, "hilfe ausgeben");
+        options.addOption("l","logger", true, "Deaktivierung/Aktivieren logger(0 Deaktiviert,1 Aktiviert)");
+        Option option = new Option("r","reflection", true, "Eingabe eines Ordners, aus dem die Token per Reﬂection geladen werden sollen und Art der Priorisierung(0 Nach Typ,1 Nach Wert)");
         option.setArgs(2);
         options.addOption(option);
         CommandLineParser parser = new DefaultParser();
@@ -123,14 +123,15 @@ public class Main {
                     } else if (annotation[0] instanceof PrioC) {
                         prioC.add(token);
                     }
-
-                    Prio annotation1 = (Prio) annotation[1];
-                    if (annotation1.value() == 1) {
-                        prio1.add(token);
-                    } else if (annotation1.value() == 2) {
-                        prio2.add(token);
-                    } else if (annotation1.value() == 3) {
-                        prio3.add(token);
+                    if(annotation.length==2) {
+                        Prio annotation1 = (Prio) annotation[1];
+                        if (annotation1.value() == 1) {
+                            prio1.add(token);
+                        } else if (annotation1.value() == 2) {
+                            prio2.add(token);
+                        } else if (annotation1.value() == 3) {
+                            prio3.add(token);
+                        }
                     }
                 } catch (ReflectiveOperationException e) {
                     System.out.println(e.getMessage());
