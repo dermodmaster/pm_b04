@@ -3,6 +3,8 @@ package lexer;
 import org.apache.commons.cli.*;
 
 import java.io.File;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -10,13 +12,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static lexer.Lexer.log;
 
 public class Main {
-    public static Logger log=Logger.getLogger(Main.class.getName());
     public static void main(String[] args) {
+        System.setOut(new PrintStream(new OutputStream(){
+            public void write(int b) {
+            }
+        }));
 
         // create Options object
 
@@ -121,9 +127,6 @@ public class Main {
                     Token token = (Token) c1.newInstance();
                     Annotation[] annotation = token.getClass().getDeclaredAnnotations();
 
-
-
-
                     if (annotation[0] instanceof CatchAll) {
                         catchAll = token;
                     } else if (annotation[0] instanceof PrioA) {
@@ -160,10 +163,7 @@ public class Main {
                 lexer.registerToken(prio3);
             }
             lexer.registerCatchAll(catchAll);
-            log.finer("Add");
             LexerPanel lp = new LexerPanel(code, lexer);
-
-
         }
     }
 
