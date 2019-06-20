@@ -19,10 +19,6 @@ import static lexer.Lexer.log;
 
 public class Main {
     public static void main(String[] args) {
-        System.setOut(new PrintStream(new OutputStream(){
-            public void write(int b) {
-            }
-        }));
 
         // create Options object
 
@@ -30,7 +26,7 @@ public class Main {
 
         // add t option
         options.addOption("h","help", false, "hilfe ausgeben");
-        options.addOption("l","logger", true, "Deaktivierung/Aktivieren logger(0 Deaktiviert,1 Aktiviert)");
+        options.addOption("l","logger", true, "Bis wohin soll der Logger gehen (0 Deaktiviert,1 Severe,2 Warning,3 Info,4 Config,5 Fine,6 Finer, 7 All)");
         Option option = new Option("r","reflection", true, "Eingabe eines Ordners, aus dem die Token per Reﬂection geladen werden sollen und Art der Priorisierung(0 Nach Typ,1 Nach Wert)");
         option.setArgs(2);
         options.addOption(option);
@@ -70,14 +66,37 @@ public class Main {
             }
 
             if (cmd.hasOption("l")) {
-                if (cmd.getOptionValue("l").equals("0")) {
-                    System.out.println("Logger Deaktiviert");
-                    log.setLevel(Level.OFF);
-                } else if (cmd.getOptionValue("l").equals("1")) {
-                    System.out.println("Logger Aktiviert");
-                    log.setLevel(Level.FINER);
-                } else {
-                    System.out.println("Falsches Argument");
+                System.setOut(new PrintStream(new OutputStream(){
+                    public void write(int b) {
+                    }
+                }));
+                switch(cmd.getOptionValue("l")){
+                    case("0"):
+                        log.setLevel(Level.OFF);
+                        break;
+                    case("1"):
+                        log.setLevel(Level.SEVERE);
+                        break;
+                    case("2"):
+                        log.setLevel(Level.WARNING);
+                        break;
+                    case("3"):
+                        log.setLevel(Level.INFO);
+                        break;
+                    case("4"):
+                        log.setLevel(Level.CONFIG);
+                        break;
+                    case("5"):
+                        log.setLevel(Level.FINE);
+                        break;
+                    case("6"):
+                        log.setLevel(Level.FINER);
+                        break;
+                    case("7"):
+                        log.setLevel(Level.ALL);
+                        break;
+                        default:
+                            log.setLevel(Level.OFF);
                 }
             }
 

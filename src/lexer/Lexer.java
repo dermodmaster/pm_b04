@@ -1,5 +1,6 @@
 package lexer;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,18 +16,22 @@ public class Lexer {
     ConsoleHandler consoleHandler;
     FileHandler fileHandler;
     public Lexer(){
-        log.setLevel(Level.FINER);
+        log.setUseParentHandlers(false);
         consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.FINER);
+        consoleHandler.setLevel(Level.FINEST);
         log.addHandler(consoleHandler);
-        consoleHandler.setFormatter(new Formatter("A","",""));
+        consoleHandler.setFormatter(new Formatter("Lexer","",""));
         try {
-            fileHandler = new FileHandler();
+            fileHandler=new FileHandler("log.html");
+            fileHandler.setLevel(Level.FINEST);
+            fileHandler.setFormatter(new HtmlFormatter("Lexer","",""));
+            log.addHandler(fileHandler);
         }
         catch (IOException ioe){
+            System.out.println("nope");
+
         }
-        fileHandler.setLevel(Level.FINEST);
-        log.addHandler(fileHandler);
+
 
     }
 
@@ -41,6 +46,7 @@ public class Lexer {
 
     public void registerToken(List<Token> inputList){
         consoleHandler.setFormatter(new Formatter("A","Lexer","registerToken"));
+        fileHandler.setFormatter(new HtmlFormatter("A","Lexer","registerToken"));
         for(Token element:inputList){
             this.token.add(element);
             //Der ConsolHandler wird erstellt und immer die aktuelle klasse genommen
@@ -49,6 +55,8 @@ public class Lexer {
     }
 
     public void registerCatchAll(Token input){
+        consoleHandler.setFormatter(new Formatter("B","Lexer","registerCatchAll"));
+        fileHandler.setFormatter(new HtmlFormatter("B","Lexer","registerCatchAll"));
         log.info("Regestriere "+input.getClass().toString());
         this.catchAll = input;
     }
@@ -70,6 +78,8 @@ public class Lexer {
      * @return
      */
     private Token testTokens(String input){
+        consoleHandler.setFormatter(new Formatter("C","Lexer","testTokens"));
+        fileHandler.setFormatter(new HtmlFormatter("C","Lexer","testTokens"));
         for(Token currentToken : token){
             //Für jeden verfügbaren lexer.Token aus der Liste die Match Methode ausführen
             Token newToken = currentToken.match(input);
