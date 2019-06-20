@@ -24,6 +24,12 @@ public class HtmlFormatter extends Formatter {
         this.klasse=klasse;
         this.methode=methode;
     }
+
+    /**
+     * Anfang des Html documents
+     * @param h der Handler
+     * @return anfang des Htmls
+     */
     @Override
     public String getHead(Handler h){
         return "<!DOCTYPE html>\n" +
@@ -31,11 +37,16 @@ public class HtmlFormatter extends Formatter {
                 "  <head>\n" +
                 "    <meta charset=\"utf-8\" />\n" +
                 "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n" +
-                "    <title>Titel der Seite | Name der Website</title>\n" +
+                "    <title>Logger Ausgabe</title>\n" +
                 "  </head>\n" +
                 "  <body style=\"font-size: 15px;\">\n";
     }
 
+    /**
+     * ende des Html documents
+     * @param h der Handler
+     * @return ende des Html documents
+     */
     @Override
     public String getTail(Handler h){
         return "\n  </body>\n" +
