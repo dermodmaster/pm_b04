@@ -14,6 +14,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Das Panel welches den Lexer benutzt
+ * @author LeventK
+ */
 public class LexerPanel {
     String code;
     String content;
@@ -22,6 +26,11 @@ public class LexerPanel {
     JTextPane editorPane1 = new JTextPane();
     JFrame f = new JFrame();
 
+    /**
+     * Konsturktor erstellet das Pannel
+     * @param code Der Eingelesnen Code
+     * @param lexer der Lexer
+     */
     public LexerPanel(String code, Lexer lexer){
         this.lexer = lexer;
         this.code = code;
@@ -79,6 +88,9 @@ public class LexerPanel {
         updateContent();
     }
 
+    /**
+     * guckt sich die verändenrung im Code an und ruft die lexer methoden auf zur bestimmung der Toxen
+     */
     public void updateContent(){
         this.code = this.editorPane1.getText();
         List<Token> tokens = lexer.tokenize(code);

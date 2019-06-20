@@ -3,6 +3,8 @@ package lexer;
 import org.apache.commons.cli.*;
 
 import java.io.File;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -10,17 +12,25 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static lexer.Lexer.log;
 
+/**
+ * Das Main
+ * @author TimoK,LevenK
+ */
 public class Main {
     public static void main(String[] args) {
+
         // create Options object
 
         Options options = new Options();
 
         // add t option
         options.addOption("h","help", false, "hilfe ausgeben");
-        options.addOption("l","logger", true, "Deaktivierung/Aktivieren logger(0 Deaktiviert,1 Aktiviert)");
+        options.addOption("l","logger", true, "Bis wohin soll der Logger gehen (0 Deaktiviert,1 Severe,2 Warning,3 Info,4 Config,5 Fine,6 Finer, 7 All)");
         Option option = new Option("r","reflection", true, "Eingabe eines Ordners, aus dem die Token per Reﬂection geladen werden sollen und Art der Priorisierung(0 Nach Typ,1 Nach Wert)");
         option.setArgs(2);
         options.addOption(option);
@@ -60,12 +70,37 @@ public class Main {
             }
 
             if (cmd.hasOption("l")) {
-                if (cmd.getOptionValue("l").equals("0")) {
-                    System.out.println("Logger Deaktiviert");
-                } else if (cmd.getOptionValue("l").equals("1")) {
-                    System.out.println("Logger Aktiviert");
-                } else {
-                    System.out.println("Falsches Argument");
+                System.setOut(new PrintStream(new OutputStream(){
+                    public void write(int b) {
+                    }
+                }));
+                switch(cmd.getOptionValue("l")){
+                    case("0"):
+                        log.setLevel(Level.OFF);
+                        break;
+                    case("1"):
+                        log.setLevel(Level.SEVERE);
+                        break;
+                    case("2"):
+                        log.setLevel(Level.WARNING);
+                        break;
+                    case("3"):
+                        log.setLevel(Level.INFO);
+                        break;
+                    case("4"):
+                        log.setLevel(Level.CONFIG);
+                        break;
+                    case("5"):
+                        log.setLevel(Level.FINE);
+                        break;
+                    case("6"):
+                        log.setLevel(Level.FINER);
+                        break;
+                    case("7"):
+                        log.setLevel(Level.ALL);
+                        break;
+                        default:
+                            log.setLevel(Level.OFF);
                 }
             }
 
@@ -114,6 +149,7 @@ public class Main {
                 try {
                     Token token = (Token) c1.newInstance();
                     Annotation[] annotation = token.getClass().getDeclaredAnnotations();
+
                     if (annotation[0] instanceof CatchAll) {
                         catchAll = token;
                     } else if (annotation[0] instanceof PrioA) {
@@ -134,7 +170,6 @@ public class Main {
                         }
                     }
                 } catch (ReflectiveOperationException e) {
-                    System.out.println(e.getMessage());
                 }
             }
 
@@ -152,8 +187,6 @@ public class Main {
             }
             lexer.registerCatchAll(catchAll);
             LexerPanel lp = new LexerPanel(code, lexer);
-
-
         }
     }
 
@@ -167,6 +200,11 @@ public class Main {
         System.out.println();
     }
 
+    /**
+     * Gibt von einenem gewissen Ordner alle classFiles zurück
+     * @param folder der ordner mit den files
+     * @return  Arraylist mit allen gefundenen files
+     */
     public static ArrayList<File> getClassFiles(final File folder) {
         ArrayList<File> files = new ArrayList<File>();
         for (final File fileEntry : folder.listFiles()) {
