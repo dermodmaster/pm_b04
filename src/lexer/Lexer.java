@@ -10,11 +10,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-
+/**
+ * Der Lexer
+ * @author TimoK,KochL
+ */
 public class Lexer {
     public static Logger log =Logger.getLogger(Lexer.class.getName());
     ConsoleHandler consoleHandler;
     FileHandler fileHandler;
+
+    /**
+     * Konstruktor
+     * setzt die Logger das loglevel ,einene Start Formatter und fügt die handler dem log hinzu
+     */
     public Lexer(){
         log.setUseParentHandlers(false);
         consoleHandler = new ConsoleHandler();
@@ -39,11 +47,18 @@ public class Lexer {
     private List<Token> token = new ArrayList<Token>();
     private Token catchAll;
 
+    /**
+     * Registiert einen Token im Lexer
+     * @param input ein Token
+     */
     public void registerToken(Token input){
         this.token.add(input);
     }
 
-
+    /**
+     * Registriert eine Liste an Token im Lexer
+     * @param inputList ein Liste mit Token
+     */
     public void registerToken(List<Token> inputList){
         consoleHandler.setFormatter(new Formatter("A","Lexer","registerToken"));
         fileHandler.setFormatter(new HtmlFormatter("A","Lexer","registerToken"));
@@ -54,6 +69,10 @@ public class Lexer {
         }
     }
 
+    /**
+     * Registiert einen Token im Lexer
+     * @param input Den CatchAll token
+     */
     public void registerCatchAll(Token input){
         consoleHandler.setFormatter(new Formatter("B","Lexer","registerCatchAll"));
         fileHandler.setFormatter(new HtmlFormatter("B","Lexer","registerCatchAll"));
@@ -61,6 +80,11 @@ public class Lexer {
         this.catchAll = input;
     }
 
+    /**
+     * Erstellt aus dem String die Tokens
+     * @param input Das zu wandelnde String
+     * @return Liste mit allen Tokens
+     */
     public List<Token> tokenize(String input){
         List<Token> output = new ArrayList<Token>();
 
@@ -73,9 +97,9 @@ public class Lexer {
     }
 
     /**
-     *
-     * @param input
-     * @return
+     *Überprüft welcher Token der String ist
+     * @param input den zu erkennenden String
+     * @return den gefundenen Token
      */
     private Token testTokens(String input){
         consoleHandler.setFormatter(new Formatter("C","Lexer","testTokens"));

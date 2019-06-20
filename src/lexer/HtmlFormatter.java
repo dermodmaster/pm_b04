@@ -3,11 +3,26 @@ package lexer;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
+/**
+ * HtmlFormatter des loggers
+ * @author TimoK
+ */
 public class HtmlFormatter extends Formatter{
-
+    /**
+     * Konstruktor
+     * @param n Der Name des Formatters
+     * @param klasse Die Klasse in der der Formatter ist
+     * @param methode Die Methode in der der Formatter ist
+     */
     public HtmlFormatter(String n, String klasse, String methode) {
         super(n, klasse, methode);
     }
+
+    /**
+     * dass Format
+     * @param record der LogRecord
+     * @return das Format als html String
+     */
     @Override
     public String format(LogRecord record) {
         String msg = super.format(record).replace("\n", "<br>");
