@@ -102,6 +102,8 @@ public class Main {
                         default:
                             log.setLevel(Level.OFF);
                 }
+            }else{
+                log.setLevel(Level.OFF);
             }
 
 
